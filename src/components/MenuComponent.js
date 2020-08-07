@@ -7,6 +7,7 @@ import {
     CardBody,
     CardTitle,
 } from 'reactstrap'
+import DishDetail from './DishDetailComponent'
 
 const Menu = ({dishes}) => {
     const [selectedDish, setSelectedDish] = useState(null)
@@ -32,28 +33,9 @@ const Menu = ({dishes}) => {
     return (
         <div className="container">
             <div className="row">{menu}</div>
-            <div classname="row">
-                {renderDish(selectedDish)}
-            </div>
-                
+            <DishDetail dish={selectedDish} />
         </div>
     )
-}
-
-function renderDish(dish) {
-    if (dish) {
-        return (
-            <Card>
-                <CardImg width="100%" src={dish.image} alt={dish.name} />
-                <CardBody>
-                    <CardTitle>{dish.name}</CardTitle>
-                    <CardText>{dish.description}</CardText>
-                </CardBody>
-            </Card>
-        )
-    } else {
-        return <div></div>
-    }
 }
 
 export default Menu
