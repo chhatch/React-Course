@@ -1,11 +1,14 @@
 import React from 'react'
 import Main from './components/MainComponent'
 import './App.css'
+import {BrowserRouter} from 'react-router-dom'
 
 const App = () => (
-    <div>
-        <Main />
-    </div>
+    <BrowserRouter>
+        <div>
+            <Main />
+        </div>
+    </BrowserRouter>
 )
 
 export default App
