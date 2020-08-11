@@ -1,22 +1,11 @@
-import React, {useState} from 'react'
-import logo from './logo.svg'
-import {Navbar, NavbarBrand} from 'reactstrap'
-import Menu from './components/MenuComponent'
+import React from 'react'
+import Main from './components/MainComponent'
 import './App.css'
-import {DISHES} from './shared/dishes'
 
-function App() {
-    const [dishes, setDishes] = useState(DISHES)
-    return (
-        <div className="App">
-            <Navbar dark color="primary">
-                <div className="container">
-                    <NavbarBrand href="/">Ristorante Con Fusion</NavbarBrand>
-                </div>
-            </Navbar>
-            <Menu dishes={dishes} />
-        </div>
-    )
-}
+const App = () => (
+    <div>
+        <Main />
+    </div>
+)
 
 export default App

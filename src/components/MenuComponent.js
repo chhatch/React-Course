@@ -3,18 +3,14 @@ import {
     Card,
     CardImg,
     CardImgOverlay,
-    CardText,
-    CardBody,
     CardTitle,
 } from 'reactstrap'
-import DishDetail from './DishDetailComponent'
 
-const Menu = ({dishes}) => {
-    const [selectedDish, setSelectedDish] = useState(null)
+const Menu = ({dishes, onClick}) => {
     const menu = dishes.map(dish => {
         return (
             <div key={dish.id} className="col-12 col-md-5 m-1">
-                <Card onClick={() => setSelectedDish(dish)}>
+                <Card onClick={() => onClick(dish.id)}>
                     <Card>
                         <CardImg
                             width="100%"
@@ -33,7 +29,6 @@ const Menu = ({dishes}) => {
     return (
         <div className="container">
             <div className="row">{menu}</div>
-            <DishDetail dish={selectedDish} />
         </div>
     )
 }

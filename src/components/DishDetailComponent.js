@@ -1,31 +1,27 @@
-import React, {useState} from 'react'
-import {
-    Card,
-    CardImg,
-    CardImgOverlay,
-    CardText,
-    CardBody,
-    CardTitle,
-} from 'reactstrap'
+import React from 'react'
+import {Card, CardImg, CardText, CardBody, CardTitle} from 'reactstrap'
 
 const DishDetail = ({dish}) => {
-    console.log(dish)
-    if (!dish) return (
-        <div></div>
-    )
+    if (!dish) return <div></div>
     return (
-        <div className="row">
-            <div className="col-12 col-md-5 m-1">
-                <Card>
-                    <CardImg width="100%" src={dish.image} alt={dish.name} />
-                    <CardBody>
-                        <CardTitle>{dish.name}</CardTitle>
-                        <CardText>{dish.description}</CardText>
-                    </CardBody>
-                </Card>
-            </div>
-            <div className="col-12 col-md-5 m-1">
-                {renderComments(dish.comments)}
+        <div className="container">
+            <div className="row">
+                <div className="col-12 col-md-5 m-1">
+                    <Card>
+                        <CardImg
+                            width="100%"
+                            src={dish.image}
+                            alt={dish.name}
+                        />
+                        <CardBody>
+                            <CardTitle>{dish.name}</CardTitle>
+                            <CardText>{dish.description}</CardText>
+                        </CardBody>
+                    </Card>
+                </div>
+                <div className="col-12 col-md-5 m-1">
+                    {renderComments(dish.comments)}
+                </div>
             </div>
         </div>
     )
@@ -41,14 +37,18 @@ function renderComments(comments) {
                     <li key={comment.id}>
                         <div className="container m-4">
                             <div className="row">
-                                <div>
-                                    {comment.comment}
-                                </div>
+                                <div>{comment.comment}</div>
                             </div>
                             <div className="row m-2">
-                                <div>
-                                    {`-- ${comment.author}, ${new Date(comment.date).toLocaleString()}`}
-                                </div>
+                                <p>
+                                    {`--${
+                                        comment.author
+                                    }, ${new Intl.DateTimeFormat('en-US', {
+                                        year: 'numeric',
+                                        month: 'short',
+                                        day: '2-digit',
+                                    }).format(new Date(comment.date))}`}
+                                </p>
                             </div>
                         </div>
                     </li>
