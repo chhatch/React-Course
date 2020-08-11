@@ -1,4 +1,5 @@
 import React, {useState} from 'react'
+import About from './AboutComponent'
 import Home from './HomeComponent'
 import Menu from './MenuComponent'
 import Contact from './ContactComponent'
@@ -33,11 +34,13 @@ function Main() {
             )}
         />
     )
+    const AboutPage = () => <About leaders={leaders} />
     return (
         <div>
             <Header />
             <Switch>
                 <Route path="/home" component={HomePage} />
+                <Route path="/aboutus" component={AboutPage} />
                 <Route
                     exact
                     path="/menu"
