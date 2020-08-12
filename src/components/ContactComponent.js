@@ -1,9 +1,10 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import {
     Breadcrumb,
     BreadcrumbItem,
     Button,
     Form,
+    FormFeedback,
     FormGroup,
     Label,
     Input,
@@ -21,17 +22,73 @@ function Contact(props) {
         contactType: 'Tel.',
         message: '',
     })
+    const [touched, setTouched] = useState({
+        firstname: false,
+        lastname: false,
+        telnum: false,
+        email: false,
+        agree: false,
+        contactType: false,
+        message: false,
+    })
+    const [formErrors, setFormErrors] = useState({
+        firstname: '',
+        lastname: '',
+        telnum: '',
+        email: '',
+    })
+
     const handleInputChange = e => {
         const target = e.target
         const value = target.type === 'checkbox' ? target.checked : target.value
         const name = target.name
         setForm({...form, [name]: value})
     }
+
     const handleSubmit = e => {
         console.log(`Current state is: ${JSON.stringify(form)}`)
         alert(`Current state is: ${JSON.stringify(form)}`)
         e.preventDefault()
     }
+
+    const handleBlur = e => {
+        const name = e.target.name
+        setTouched({...touched, [name]: true})
+    }
+
+    const validate = () => {
+        const errors = {firstname: '', lastname: '', telnum: '', email: ''}
+
+        if (touched.firstname && form.firstname.length < 3) {
+            errors.firstname = 'First name should be at least 3 characters.'
+        } else if (touched.firstName && form.firstname.length > 10) {
+            errors.firstname =
+                'First name should be no more than 10 characters.'
+        }
+
+        if (touched.lastname && form.lastname.length < 3) {
+            errors.lastname = 'Last name should be at least 3 characters.'
+        } else if (touched.lastName && form.lastname.length > 10) {
+            errors.lastname = 'Last name should be no more than 10 characters.'
+        }
+
+        const reg = /^\d+$/
+        if (touched.telnum && !reg.test(form.telnum)) {
+            errors.telnum = 'Tel. Number should contain only numbers'
+        }
+
+        if (
+            touched.email &&
+            form.email.split('').filter(x => x === '@').length !== 1
+        ) {
+            errors.email = 'Email address should contain exactly one @.'
+        }
+
+        //there must be a more React-y way to handle this..
+        if (JSON.stringify(formErrors) !== JSON.stringify(errors)) setFormErrors(errors)
+    }
+
+    useEffect(validate)
     return (
         <div className="container">
             <div className="row">
@@ -109,8 +166,14 @@ function Contact(props) {
                                     name="firstname"
                                     placeholder="First Name"
                                     value={form.firstname}
+                                    valid={formErrors.firstname === ''}
+                                    invalid={formErrors.firstname !== ''}
                                     onChange={handleInputChange}
+                                    onBlur={handleBlur}
                                 />
+                                <FormFeedback>
+                                    {formErrors.firstname}
+                                </FormFeedback>
                             </Col>
                         </FormGroup>
                         <FormGroup row>
@@ -124,8 +187,14 @@ function Contact(props) {
                                     name="lastname"
                                     placeholder="Last Name"
                                     value={form.lastname}
+                                    valid={formErrors.lastname === ''}
+                                    invalid={formErrors.lastname !== ''}
                                     onChange={handleInputChange}
+                                    onBlur={handleBlur}
                                 />
+                                <FormFeedback>
+                                    {formErrors.lastname}
+                                </FormFeedback>
                             </Col>
                         </FormGroup>
                         <FormGroup row>
@@ -139,8 +208,12 @@ function Contact(props) {
                                     name="telnum"
                                     placeholder="Tel. number"
                                     value={form.telnum}
+                                    valid={formErrors.telnum === ''}
+                                    invalid={formErrors.telnum !== ''}
                                     onChange={handleInputChange}
+                                    onBlur={handleBlur}
                                 />
+                                <FormFeedback>{formErrors.telnum}</FormFeedback>
                             </Col>
                         </FormGroup>
                         <FormGroup row>
@@ -154,8 +227,12 @@ function Contact(props) {
                                     name="email"
                                     placeholder="Email"
                                     value={form.email}
+                                    valid={formErrors.email === ''}
+                                    invalid={formErrors.email !== ''}
                                     onChange={handleInputChange}
+                                    onBlur={handleBlur}
                                 />
+                                <FormFeedback>{formErrors.email}</FormFeedback>
                             </Col>
                         </FormGroup>
                         <FormGroup row>
