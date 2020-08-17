@@ -6,17 +6,10 @@ import Contact from './ContactComponent'
 import DishDetail from './DishDetailComponent'
 import Header from './HeaderComponent'
 import Footer from './FooterComponent'
-import {DISHES} from '../shared/dishes'
-import {COMMENTS} from '../shared/comments'
-import {LEADERS} from '../shared/leaders'
-import {PROMOTIONS} from '../shared/promotions'
-import {Switch, Route, Redirect} from 'react-router-dom'
+import {Switch, Route, Redirect, withRouter} from 'react-router-dom'
+import {connect} from 'react-redux'
 
-function Main() {
-    const [dishes, setDishes] = useState(DISHES)
-    const [comments, setComments] = useState(COMMENTS)
-    const [leaders, setLeaders] = useState(LEADERS)
-    const [promotions, setPromotions] = useState(PROMOTIONS)
+const Main = ({dishes, comments, leaders, promotions}) => {
     const HomePage = () => (
         <Home
             dish={dishes.find(dish => dish.featured)}
@@ -55,4 +48,11 @@ function Main() {
     )
 }
 
-export default Main
+const mapStateToProps = state => ({
+    dishes: state.dishes,
+    comments: state.comments,
+    leaders: state.leaders,
+    promotions: state.promotions,
+})
+
+export default withRouter(connect(mapStateToProps, {})(Main))
