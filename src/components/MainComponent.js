@@ -8,8 +8,9 @@ import Header from './HeaderComponent'
 import Footer from './FooterComponent'
 import {Switch, Route, Redirect, withRouter} from 'react-router-dom'
 import {connect} from 'react-redux'
+import {addComment} from '../redux/ActionCreators'
 
-const Main = ({dishes, comments, leaders, promotions}) => {
+const Main = ({dishes, comments, leaders, promotions, addComment}) => {
     const HomePage = () => (
         <Home
             dish={dishes.find(dish => dish.featured)}
@@ -25,6 +26,7 @@ const Main = ({dishes, comments, leaders, promotions}) => {
             comments={comments.filter(
                 comment => comment.dishId === parseInt(match.params.dishId),
             )}
+            addComment={addComment}
         />
     )
     const AboutPage = () => <About leaders={leaders} />
@@ -55,4 +57,9 @@ const mapStateToProps = state => ({
     promotions: state.promotions,
 })
 
-export default withRouter(connect(mapStateToProps, {})(Main))
+const mapDispatchToProps = dispatch => ({
+    addComment: (dishId, rating, author, comment) =>
+        dispatch(addComment(dishId, rating, author, comment)),
+})
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Main))
