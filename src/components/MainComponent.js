@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useEffect} from 'react'
 import About from './AboutComponent'
 import Home from './HomeComponent'
 import Menu from './MenuComponent'
@@ -8,21 +8,26 @@ import Header from './HeaderComponent'
 import Footer from './FooterComponent'
 import {Switch, Route, Redirect, withRouter} from 'react-router-dom'
 import {connect} from 'react-redux'
-import {addComment} from '../redux/ActionCreators'
+import {addComment, fetchDishes} from '../redux/ActionCreators'
 
-const Main = ({dishes, comments, leaders, promotions, addComment}) => {
+const Main = ({dishes, comments, leaders, promotions, addComment, fetchDishes}) => {
+    useEffect(fetchDishes, [])
     const HomePage = () => (
         <Home
-            dish={dishes.find(dish => dish.featured)}
+            dish={dishes.dishes.find(dish => dish.featured)}
+            dishesLoading={dishes.isLoading}
+            dishesErrMsg={dishes.errMsg}
             promotion={promotions.find(promo => promo.featured)}
             leader={leaders.find(leader => leader.featured)}
         />
     )
     const DishWithId = ({match}) => (
         <DishDetail
-            dish={dishes.find(
+            dish={dishes.dishes.find(
                 dish => dish.id === parseInt(match.params.dishId),
             )}
+            dishesLoading={dishes.isLoading}
+            dishesErrMsg={dishes.errMsg}
             comments={comments.filter(
                 comment => comment.dishId === parseInt(match.params.dishId),
             )}
@@ -60,6 +65,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
     addComment: (dishId, rating, author, comment) =>
         dispatch(addComment(dishId, rating, author, comment)),
+    fetchDishes: () => dispatch(fetchDishes()),
 })
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Main))

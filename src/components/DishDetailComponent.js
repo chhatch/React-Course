@@ -17,8 +17,9 @@ import {
 } from 'reactstrap'
 import {Link} from 'react-router-dom'
 import {Control, LocalForm, Errors} from 'react-redux-form'
+import { Loading } from './LoadingComponent'
 
-const DishDetail = ({dish, comments, addComment}) => {
+const DishDetail = ({dish, comments, addComment, dishesLoading, errMsg}) => {
     const [isModalOpen, setIsModalOpen] = useState(false)
     const required = val => val && val.length
     const maxLength = len => val => !val || val.length <= len
@@ -157,7 +158,25 @@ const DishDetail = ({dish, comments, addComment}) => {
         )
     }
 
-    if (!dish) return <div></div>
+    if (dishesLoading) {
+        return (
+            <div className="container">
+                <div className="row">
+                    <Loading />
+                </div>
+            </div>
+        )
+    }
+    else if (errMsg) {
+        return (
+            <div className="container">
+                <div className="row">
+                    <h4>{errMsg}</h4>
+                </div>
+            </div>
+        )
+    } 
+    else if (!dish) return <div></div>
     return (
         <div className="container">
             <div className="row">
