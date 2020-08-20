@@ -20,7 +20,7 @@ import {Control, LocalForm, Errors} from 'react-redux-form'
 import { Loading } from './LoadingComponent'
 import {baseUrl} from '../shared/baseUrl'
 
-const DishDetail = ({dish, comments, addComment, dishesLoading, errMsg}) => {
+const DishDetail = ({dish, comments, postComment, dishesLoading, errMsg}) => {
     const [isModalOpen, setIsModalOpen] = useState(false)
     const required = val => val && val.length
     const maxLength = len => val => !val || val.length <= len
@@ -29,10 +29,10 @@ const DishDetail = ({dish, comments, addComment, dishesLoading, errMsg}) => {
     const validEmail = val =>
         /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(val)
 
-    const CommentForm = ({dishId, addComment}) => {
+    const CommentForm = ({dishId, postComment}) => {
         const handleSubmit = values => {
             setIsModalOpen(!isModalOpen)
-            addComment(dishId, values.rating, values.author, values.comment)
+            postComment(dishId, values.rating, values.author, values.comment)
         }
         
         return (
@@ -44,7 +44,7 @@ const DishDetail = ({dish, comments, addComment, dishesLoading, errMsg}) => {
                 isOpen={isModalOpen}
                 toggle={() => setIsModalOpen(!isModalOpen)}>
                 <ModalHeader toggle={() => setIsModalOpen(!isModalOpen)}>
-                    Login
+                    Post Comment
                 </ModalHeader>
                 <ModalBody>
                     <LocalForm onSubmit={values => handleSubmit(values)}>
@@ -122,11 +122,11 @@ const DishDetail = ({dish, comments, addComment, dishesLoading, errMsg}) => {
         </>
     )}
 
-    function RenderComments({comments, addComment, dishId}) {
+    function RenderComments({comments, postComment, dishId}) {
         if (!comments)
             return (
                 <div>
-                    <CommentForm dishId={dishId} addComment={addComment} />
+                    <CommentForm dishId={dishId} postComment={postComment} />
                 </div>
             )
         return (
@@ -154,7 +154,7 @@ const DishDetail = ({dish, comments, addComment, dishesLoading, errMsg}) => {
                         </li>
                     ))}
                 </ul>
-                    <CommentForm dishId={dishId} addComment={addComment} />
+                    <CommentForm dishId={dishId} postComment={postComment} />
             </div>
         )
     }
@@ -210,7 +210,7 @@ const DishDetail = ({dish, comments, addComment, dishesLoading, errMsg}) => {
                     </Card>
                 </div>
                 <div className="col-12 col-md-5 m-1">
-                    <RenderComments comments={comments} addComment={addComment} dishId={dish.id} />
+                    <RenderComments comments={comments} postComment={postComment} dishId={dish.id} />
                 </div>
             </div>
         </div>

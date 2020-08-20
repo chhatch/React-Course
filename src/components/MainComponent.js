@@ -9,7 +9,7 @@ import Footer from './FooterComponent'
 import {Switch, Route, Redirect, withRouter} from 'react-router-dom'
 import {connect} from 'react-redux'
 import {
-    addComment,
+    postComment,
     fetchDishes,
     fetchComments,
     fetchPromos,
@@ -21,15 +21,21 @@ const Main = ({
     comments,
     leaders,
     promotions,
-    addComment,
+    postComment,
     fetchDishes,
     fetchComments,
     fetchPromotions,
     resetFeedbackForm,
 }) => {
-    useEffect(() => {fetchDishes()}, [])
-    useEffect(() => {fetchComments()}, [])
-    useEffect(() => {fetchPromotions()}, [])
+    useEffect(() => {
+        fetchDishes()
+    }, [])
+    useEffect(() => {
+        fetchComments()
+    }, [])
+    useEffect(() => {
+        fetchPromotions()
+    }, [])
     const HomePage = () => (
         <Home
             dish={dishes.dishes.find(dish => dish.featured)}
@@ -52,7 +58,7 @@ const Main = ({
                 comment => comment.dishId === parseInt(match.params.dishId),
             )}
             commentsErrMsg={comments.errMsg}
-            addComment={addComment}
+            postComment={postComment}
         />
     )
     const AboutPage = () => <About leaders={leaders} />
@@ -90,8 +96,9 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-    addComment: (dishId, rating, author, comment) =>
-        dispatch(addComment(dishId, rating, author, comment)),
+    postComment: (dishId, rating, author, comment) => {
+        dispatch(postComment(dishId, rating, author, comment))
+    },
     fetchDishes: () => dispatch(fetchDishes()),
     resetFeedbackForm: () => dispatch(actions.reset('feedback')),
     fetchComments: () => dispatch(fetchComments()),

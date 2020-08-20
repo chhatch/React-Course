@@ -1,10 +1,48 @@
 import * as ActionTypes from './ActionTypes'
 import {baseUrl} from '../shared/baseUrl'
 
-export const addComment = (dishId, rating, author, comment) => ({
+export const addComment = comment => ({
     type: ActionTypes.ADD_COMMENT,
-    payload: {dishId, rating, author, comment},
+    payload: comment,
 })
+
+export const postComment = (
+    dishId,
+    rating,
+    author,
+    comment,
+) => async dispatch => {
+    const newComment = {
+        dishId,
+        rating,
+        author,
+        comment,
+        date: new Date().toISOString(),
+    }
+
+    try {
+        const response = await fetch(baseUrl + 'comments', {
+            method: 'POST',
+            body: JSON.stringify(newComment),
+            headers: {'Content-Type': 'application/json'},
+            credentials: 'same-origin',
+        })
+        if (response.ok) {
+            const comment = await response.json()
+            dispatch(addComment(comment))
+        } else {
+            var error = new Error(
+                'Error ' + response.status + ': ' + response.statusText,
+            )
+            error.response = response
+            throw error
+        }
+    } catch (err) {
+        console.log('Post comment failed', error.message)
+        alert(`We were unable to post your comment
+Error: ${err.message}`)
+    }
+}
 
 export const fetchDishes = () => async dispatch => {
     dispatch(dishesLoading(true))
