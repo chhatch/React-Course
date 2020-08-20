@@ -8,7 +8,12 @@ import Header from './HeaderComponent'
 import Footer from './FooterComponent'
 import {Switch, Route, Redirect, withRouter} from 'react-router-dom'
 import {connect} from 'react-redux'
-import {addComment, fetchDishes} from '../redux/ActionCreators'
+import {
+    addComment,
+    fetchDishes,
+    fetchComments,
+    fetchPromos,
+} from '../redux/ActionCreators'
 import {actions} from 'react-redux-form'
 
 const Main = ({
@@ -18,15 +23,21 @@ const Main = ({
     promotions,
     addComment,
     fetchDishes,
+    fetchComments,
+    fetchPromotions,
     resetFeedbackForm,
 }) => {
-    useEffect(fetchDishes, [])
+    useEffect(() => {fetchDishes()}, [])
+    useEffect(() => {fetchComments()}, [])
+    useEffect(() => {fetchPromotions()}, [])
     const HomePage = () => (
         <Home
             dish={dishes.dishes.find(dish => dish.featured)}
             dishesLoading={dishes.isLoading}
             dishesErrMsg={dishes.errMsg}
-            promotion={promotions.find(promo => promo.featured)}
+            promo={promotions.promotions.find(promo => promo.featured)}
+            promosLoading={promotions.isLoading}
+            promosErrMsg={promotions.errMsg}
             leader={leaders.find(leader => leader.featured)}
         />
     )
@@ -37,9 +48,10 @@ const Main = ({
             )}
             dishesLoading={dishes.isLoading}
             dishesErrMsg={dishes.errMsg}
-            comments={comments.filter(
+            comments={comments.comments.filter(
                 comment => comment.dishId === parseInt(match.params.dishId),
             )}
+            commentsErrMsg={comments.errMsg}
             addComment={addComment}
         />
     )
@@ -82,6 +94,8 @@ const mapDispatchToProps = dispatch => ({
         dispatch(addComment(dishId, rating, author, comment)),
     fetchDishes: () => dispatch(fetchDishes()),
     resetFeedbackForm: () => dispatch(actions.reset('feedback')),
+    fetchComments: () => dispatch(fetchComments()),
+    fetchPromotions: () => dispatch(fetchPromos()),
 })
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Main))

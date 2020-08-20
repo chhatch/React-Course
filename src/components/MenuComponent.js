@@ -9,6 +9,7 @@ import {
 } from 'reactstrap'
 import {Link} from 'react-router-dom'
 import {Loading} from './LoadingComponent'
+import {baseUrl} from '../shared/baseUrl'
 
 const Menu = ({dishes, onClick}) => {
     const menu = dishes.dishes.map(dish => {
@@ -19,7 +20,7 @@ const Menu = ({dishes, onClick}) => {
                         <Card>
                             <CardImg
                                 width="100%"
-                                src={dish.image}
+                                src={baseUrl + dish.image}
                                 alt={dish.name}
                             />
                         </Card>

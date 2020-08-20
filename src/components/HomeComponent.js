@@ -7,20 +7,28 @@ import {
     CardTitle,
     CardSubtitle,
 } from 'reactstrap'
-import { Loading } from './LoadingComponent'
+import {Loading} from './LoadingComponent'
+import {baseUrl} from '../shared/baseUrl'
 
-const Home = ({dish, leader, promotion, dishesLoading, dishesErrMsg}) => {
+const Home = ({
+    dish,
+    leader,
+    promo,
+    promosLoading,
+    promosErrMsg,
+    dishesLoading,
+    dishesErrMsg,
+}) => {
     const RenderCard = ({item, isLoading, errMsg}) => {
         if (isLoading) {
             return <Loading />
         } else if (errMsg) {
-            return (
-                <h4>{errMsg}</h4>
-            )
+            console.log('ERR', errMsg)
+            return <h4>{errMsg}</h4>
         } else {
             return (
                 <Card>
-                    <CardImg src={item.image} alt={item.name} />
+                    <CardImg src={baseUrl + item.image} alt={item.name} />
                     <CardBody>
                         <CardTitle>{item.name}</CardTitle>
                         {item.designation ? (
@@ -37,13 +45,20 @@ const Home = ({dish, leader, promotion, dishesLoading, dishesErrMsg}) => {
             <div className="row align-items-start">
                 <div className="col-12 col-md m-1">
                     <RenderCard
-                        item={promotion}
+                        item={dish}
                         isLoading={dishesLoading}
-                        errMess={dishesErrMsg}
+                        errMsg={dishesErrMsg}
                     />
                 </div>
                 <div className="col-12 col-md m-1">
-                    <RenderCard item={leader} />
+                    <RenderCard
+                        item={promo}
+                        isLoading={promosLoading}
+                        errMsg={promosErrMsg}
+                    />
+                </div>
+                <div className="col-12 col-md m-1">
+                    <RenderCard item={leader} type="leader"/>
                 </div>
             </div>
         </div>
