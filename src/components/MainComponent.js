@@ -15,6 +15,7 @@ import {
     fetchPromos,
 } from '../redux/ActionCreators'
 import {actions} from 'react-redux-form'
+import {TransitionGroup, CSSTransition} from 'react-transition-group'
 
 const Main = ({
     dishes,
@@ -26,6 +27,7 @@ const Main = ({
     fetchComments,
     fetchPromotions,
     resetFeedbackForm,
+    location
 }) => {
     useEffect(() => {
         fetchDishes()
@@ -65,24 +67,33 @@ const Main = ({
     return (
         <div>
             <Header />
-            <Switch>
-                <Route path="/home" component={HomePage} />
-                <Route path="/aboutus" component={AboutPage} />
-                <Route
-                    exact
-                    path="/menu"
-                    component={() => <Menu dishes={dishes} />}
-                />
-                <Route path="/menu/:dishId" component={DishWithId} />
-                <Route
-                    exact
-                    path="/contactus"
-                    component={() => (
-                        <Contact resetFeedbackForm={resetFeedbackForm} />
-                    )}
-                />
-                <Redirect to="/home" />
-            </Switch>
+            <TransitionGroup>
+                <CSSTransition
+                    key={location.key}
+                    classNames="page"
+                    timeout={300}>
+                    <Switch location={location}>
+                        <Route path="/home" component={HomePage} />
+                        <Route path="/aboutus" component={AboutPage} />
+                        <Route
+                            exact
+                            path="/menu"
+                            component={() => <Menu dishes={dishes} />}
+                        />
+                        <Route path="/menu/:dishId" component={DishWithId} />
+                        <Route
+                            exact
+                            path="/contactus"
+                            component={() => (
+                                <Contact
+                                    resetFeedbackForm={resetFeedbackForm}
+                                />
+                            )}
+                        />
+                        <Redirect to="/home" />
+                    </Switch>
+                </CSSTransition>
+            </TransitionGroup>
             <Footer />
         </div>
     )
