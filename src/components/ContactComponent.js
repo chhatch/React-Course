@@ -9,10 +9,11 @@ const minLength = len => val => val && val.length >= len
 const isNumber = val => !isNaN(Number(val))
 const validEmail = val => /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(val)
 
-function Contact({resetFeedbackForm}) {
+function Contact({resetFeedbackForm, postFeedback}) {
     const handleSubmit = values => {
-        console.log(`Current state is: ${JSON.stringify(values)}`)
-        alert(`Current state is: ${JSON.stringify(values)}`)
+        postFeedback(values)
+        alert(`Thank you for your feedback!
+${JSON.stringify(values)}`)
         resetFeedbackForm()
     }
 

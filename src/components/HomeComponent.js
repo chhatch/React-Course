@@ -9,6 +9,7 @@ import {
 } from 'reactstrap'
 import {Loading} from './LoadingComponent'
 import {baseUrl} from '../shared/baseUrl'
+import {FadeTransform} from 'react-animation-components'
 
 const Home = ({
     dish,
@@ -18,25 +19,33 @@ const Home = ({
     promosErrMsg,
     dishesLoading,
     dishesErrMsg,
+    leadersLoading,
+    leadersErrMsg
 }) => {
     const RenderCard = ({item, isLoading, errMsg}) => {
+        console.log('loading', isLoading)
         if (isLoading) {
             return <Loading />
         } else if (errMsg) {
-            console.log('ERR', errMsg)
             return <h4>{errMsg}</h4>
         } else {
             return (
-                <Card>
-                    <CardImg src={baseUrl + item.image} alt={item.name} />
-                    <CardBody>
-                        <CardTitle>{item.name}</CardTitle>
-                        {item.designation ? (
-                            <CardSubtitle>{item.designation}</CardSubtitle>
-                        ) : null}
-                        <CardText>{item.description}</CardText>
-                    </CardBody>
-                </Card>
+                <FadeTransform
+                    in
+                    transformProps={{
+                        exitTransform: 'scale(0.5) translateY(-50%)',
+                    }}>
+                    <Card>
+                        <CardImg src={baseUrl + item.image} alt={item.name} />
+                        <CardBody>
+                            <CardTitle>{item.name}</CardTitle>
+                            {item.designation ? (
+                                <CardSubtitle>{item.designation}</CardSubtitle>
+                            ) : null}
+                            <CardText>{item.description}</CardText>
+                        </CardBody>
+                    </Card>
+                </FadeTransform>
             )
         }
     }
@@ -58,7 +67,11 @@ const Home = ({
                     />
                 </div>
                 <div className="col-12 col-md m-1">
-                    <RenderCard item={leader} type="leader"/>
+                    <RenderCard
+                        item={leader}
+                        isLoading={leadersLoading}
+                        errMsg={leadersErrMsg}
+                    />
                 </div>
             </div>
         </div>

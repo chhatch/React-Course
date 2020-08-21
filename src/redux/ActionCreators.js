@@ -137,3 +137,61 @@ export const addPromos = promos => ({
     type: ActionTypes.ADD_PROMOS,
     payload: promos,
 })
+
+export const fetchLeaders = () => async dispatch => {
+    dispatch(leaderLoading(true))
+
+    try {
+        const response = await fetch(baseUrl + 'leaders')
+        if (response.ok) {
+            const leaders = await response.json()
+            dispatch(addLeaders(leaders))
+        } else {
+            var error = new Error(
+                'Error ' + response.status + ': ' + response.statusText,
+            )
+            error.response = response
+            throw error
+        }
+    } catch (err) {
+        dispatch(leadersFailed(err))
+    }
+}
+
+export const leaderLoading = () => ({
+    type: ActionTypes.LEADERS_LOADING,
+})
+
+export const leadersFailed = err => ({
+    type: ActionTypes.LEADERS_FAILED,
+    payload: err.message,
+})
+
+export const addLeaders = leaders => ({
+    type: ActionTypes.ADD_LEADERS,
+    payload: leaders,
+})
+
+export const postFeedback = feedback => async dispatch => {
+    try {
+        const response = await fetch(baseUrl + 'feedback', {
+            method: 'POST',
+            body: JSON.stringify(feedback),
+            headers: {'Content-Type': 'application/json'},
+            credentials: 'same-origin',
+        })
+        if (response.ok) {
+            const feedback = await response.json()
+        } else {
+            var error = new Error(
+                'Error ' + response.status + ': ' + response.statusText,
+            )
+            error.response = response
+            throw error
+        }
+    } catch (err) {
+        console.log('Post feedback failed', error.message)
+        alert(`We were unable to post your feedback
+Error: ${err.message}`)
+    }
+}
